@@ -10,7 +10,7 @@ camera = uvage.Camera(800, 600)
 background = uvage.from_image(400, 300, "jungle_background.jpeg")
 background.size = [800, 600]
 sword = uvage.from_image(400, 570, "sword.png")
-sword.scale_by(0.2)
+sword.scale_by(0.15)
 heart1 = uvage.from_image(30, 30, "heart.png")
 heart1.size = [40, 40]
 heart2 = uvage.from_image(70, 30, "heart.png")
@@ -27,9 +27,9 @@ def tick():
     global game_over
     camera.draw(background)
     if uvage.is_pressing("left arrow"):
-        sword.x -= 5
+        sword.x -= 6
     if uvage.is_pressing("right arrow"):
-        sword.x += 5
+        sword.x += 6
     if lives_left >= 1:
         camera.draw(heart1)
     if lives_left >= 2:
