@@ -20,11 +20,13 @@
 #   player has left. When the player gets a star, an additional heart appears, when they hit a ninja, one heart
 #   disappears, and when there are no hearts left, the game ends.
 
+# everything below is new as of Checkpoint 2.
+
 import uvage
 
 camera = uvage.Camera(800, 600)
 
-# variables that will be referenced in the tick function
+# some of the variables that will be referenced in the tick function
 lives_left = 3
 game_over = False
 points = 0
@@ -39,19 +41,26 @@ sword = uvage.from_image(400, 560, "sword.png")
 sword.scale_by(0.15)
 sword.speedx = 0
 sword.speedy = 0
+star1 = uvage.from_image(200, -30, "star.png")
+star1.scale_by(0.1)
+star2 = uvage.from_image(400, -30, "star.png")
+star2.scale_by(0.1)
+star3 = uvage.from_image(600, -30, "star.png")
+star3.scale_by(0.1)
+stars = [star1, star2, star3]
 ninja1 = uvage.from_image(100, -30, "baddie.png")
 ninja1.scale_by(0.2)
 ninja2 = uvage.from_image(150, -30, "baddie.png")
 ninja2.scale_by(0.2)
 ninja3 = uvage.from_image(200, -30, "baddie.png")
 ninja3.scale_by(0.2)
+baddies = [ninja1, ninja2, ninja3]
 heart1 = uvage.from_image(30, 30, "heart.png")
 heart1.size = [40, 40]
 heart2 = uvage.from_image(70, 30, "heart.png")
 heart2.size = [40, 40]
 heart3 = uvage.from_image(110, 30, "heart.png")
 heart3.size = [40, 40]
-score = uvage.from_text(750, 30, str(points), 35, "red")
 
 
 def tick():
@@ -61,16 +70,29 @@ def tick():
     global clock
     camera.draw(background)
     clock += 1
-    if not game_over:
-        ninja1.y += 5
-    if ninja1.bottom_touches(sword, 0, -10):
-        points += 1
-        ninja1.y = -30
-    if uvage.is_pressing("left arrow"):
+    score = uvage.from_text(750, 30, str(points), 35, "red")
+    for ninja in baddies:
+        if not game_over:
+            ninja.y += 5
+        if ninja.bottom_touches(sword, 0, -10):
+            points += 1
+            ninja.y = -30
+        if ninja.y >= 580:
+            ninja.y = -30
+    for star in stars:
+        if not game_over:
+            star.y += 5
+        if star.touches(sword):
+            if lives_left < 3:
+                lives_left += 1
+            star.y = -30
+        if star.y >= 590:
+            star.y = -30
+    if uvage.is_pressing("left arrow") and sword.x >= 38:
         sword.move_speed()
         if sword.speedx >= -10:
             sword.speedx -= 1
-    if uvage.is_pressing("right arrow"):
+    if uvage.is_pressing("right arrow") and sword.x <= 762:
         sword.move_speed()
         if sword.speedx <= 10:
             sword.speedx += 1
@@ -84,11 +106,10 @@ def tick():
         camera.draw(heart3)
     if lives_left == 0:
         game_over = True
+# here is probably where we will add more draw statements to show the falling stars and ninjas
     camera.draw(score)
-    camera.draw(ninja1)
     camera.draw(sword)
     camera.display()
 
 
 uvage.timer_loop(30, tick)
-
