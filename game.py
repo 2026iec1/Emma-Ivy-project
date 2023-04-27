@@ -29,7 +29,7 @@ camera = uvage.Camera(800, 600)
 lives_left = 3
 game_over = False
 points = 0
-clock = 0  # I haven't written code for this in the function yet, but I was thinking we could use it to tell the game
+clock = 0  # I was thinking we could use this to tell the game
 # which baddie to spawn at a given moment. Like every x amount of time, we can cycle through the same pattern of baddies
 # falling from the top
 falling = {"ninja1": True, "ninja2": False, "ninja3": False, "ninja4": False, "star1": False, "star2": False,
